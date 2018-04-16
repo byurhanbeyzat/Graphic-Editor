@@ -10,19 +10,16 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
 
 import utils.AlertBox;
 
 public class Main extends Application {
 
-  GraphicsContext gc;
+  GraphicsContext g;
 
-  private void drawShapes(GraphicsContext gc) {
-    gc.setLineWidth(2);
-    gc.fillOval(10, 60, 200, 200);
-    gc.strokeOval(240, 60, 200, 200);
+  private void drawShape(GraphicsContext g) {
+    g.fillOval(10, 60, 100, 100);
   }
 
   public void start(Stage primaryStage) throws Exception {
@@ -36,19 +33,28 @@ public class Main extends Application {
 
     // Create menus
     Menu fileMenu = new Menu("File");
+    Menu helpMenu = new Menu("Help");
 
     // Create FileMenu items
+    MenuItem newCanvasItem = new MenuItem("New Canvas");
     MenuItem exitItem = new MenuItem("Exit");
+
     MenuItem aboutItem = new MenuItem("About");
     MenuItem hiwItem = new MenuItem("How it works?");
 
     // Add menu items to Menus
-    fileMenu.getItems().addAll(aboutItem, hiwItem, divider, exitItem);
+    fileMenu.getItems().addAll(newCanvasItem, divider, exitItem);
+    helpMenu.getItems().addAll(aboutItem, hiwItem);
 
     // Add Menu to the Menu Bar
-    menuBar.getMenus().addAll(fileMenu);
+    menuBar.getMenus().addAll(fileMenu, helpMenu);
 
     // Functions
+    newCanvasItem.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
+    newCanvasItem.setOnAction(e -> {
+      g.clearRect(0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight());
+    });
+
     exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
     exitItem.setOnAction(e -> System.exit(0));
 
@@ -87,56 +93,87 @@ public class Main extends Application {
     GridPane shapeProperties = new GridPane();
     shapeProperties.setPadding(new Insets(30, 20, 10, 20));
     shapeProperties.setVgap(10);
-    shapeProperties.setPrefWidth(200);
+    shapeProperties.setPrefWidth(180);
+
+    // Text field for X position
+    Label xPosFieldLabel = new Label("Enter X Position:");
+    GridPane.setConstraints(xPosFieldLabel, 0, 0);
+    TextField xPosField = new TextField();
+    xPosField.setOnMouseClicked(e -> xPosField.clear());
+    GridPane.setConstraints(xPosField, 0, 1);
+
+    // Text field for Y position
+    Label yPosFieldLabel = new Label("Enter Y Position:");
+    GridPane.setConstraints(yPosFieldLabel, 0, 2);
+    TextField yPosField = new TextField();
+    yPosField.setOnMouseClicked(e -> yPosField.clear());
+    GridPane.setConstraints(yPosField, 0, 3);
 
     // Text field for width
-    TextField widthField = new TextField("Width:");
+    Label widthFieldLabel = new Label("Enter Width:");
+    GridPane.setConstraints(widthFieldLabel, 0, 4);
+    TextField widthField = new TextField();
     widthField.setOnMouseClicked(e -> widthField.clear());
-    GridPane.setConstraints(widthField, 0, 0);
+    GridPane.setConstraints(widthField, 0, 5);
 
     // Text field for height
-    TextField heightField = new TextField("Height:");
+    Label heightFieldLabel = new Label("Enter Height:");
+    GridPane.setConstraints(heightFieldLabel, 0, 6);
+    TextField heightField = new TextField();
     heightField.setOnMouseClicked(e -> heightField.clear());
-    GridPane.setConstraints(heightField, 0, 1);
+    GridPane.setConstraints(heightField, 0, 7);
 
     // Text field for stroke
-    TextField strokeField = new TextField("Stroke:");
+    Label strokeFieldLabel = new Label("Enter Stroke width:");
+    GridPane.setConstraints(strokeFieldLabel, 0, 8);
+    TextField strokeField = new TextField();
     strokeField.setOnMouseClicked(e -> strokeField.clear());
-    GridPane.setConstraints(strokeField, 0, 2);
+    GridPane.setConstraints(strokeField, 0, 9);
 
     // Color picker for shape color
     Label fillColorLabel = new Label("Choose fill color:");
-    GridPane.setConstraints(fillColorLabel, 0, 6);
+    GridPane.setConstraints(fillColorLabel, 0, 14);
     ColorPicker fillColor = new ColorPicker(Color.TRANSPARENT);
-    fillColor.setPrefWidth(200);
-    GridPane.setConstraints(fillColor, 0, 7);
+    fillColor.setPrefWidth(180);
+    GridPane.setConstraints(fillColor, 0, 15);
 
     // Color picker for shape stroke color
     Label strokeColorLabel = new Label("Choose stroke color:");
-    GridPane.setConstraints(strokeColorLabel, 0, 8);
+    GridPane.setConstraints(strokeColorLabel, 0, 16);
     ColorPicker strokeColor = new ColorPicker(Color.BLACK);
-    strokeColor.setPrefWidth(200);
-    GridPane.setConstraints(strokeColor, 0, 9);
+    strokeColor.setPrefWidth(180);
+    GridPane.setConstraints(strokeColor, 0, 17);
 
-    fillColor.setOnAction(e -> gc.setFill(fillColor.getValue()));
-    strokeColor.setOnAction(e -> gc.setStroke(strokeColor.getValue()));
+    fillColor.setOnAction(e -> g.setFill(fillColor.getValue()));
+    strokeColor.setOnAction(e -> g.setStroke(strokeColor.getValue()));
 
     // Button to draw the shape
     Button generateButton = new Button("Generate Shape");
-    GridPane.setConstraints(generateButton, 0, 15);
-    generateButton.setPrefWidth(200);
+    GridPane.setConstraints(generateButton, 0, 23);
+    generateButton.setPrefWidth(180);
 
-    generateButton.setOnAction(e -> drawShapes(gc));
+    generateButton.setOnAction(e -> {
+      if (xPosField.getText().trim().equals("") || yPosField.getText().trim().equals("") || widthField.getText().trim().equals("") || heightField.getText().trim().equals("")) {
+        AlertBox.warning("Warning!", "Please fill all of the required fields!");
+        return;
+      }
+
+      if (strokeField.getText().trim().equals("")) {
+        strokeField.setText("1");
+      }
+
+      drawShape(g);
+    });
 
     // Add all elements to panel
-    shapeProperties.getChildren().addAll(widthField, heightField, strokeField, fillColorLabel, fillColor, strokeColorLabel, strokeColor, generateButton);
+    shapeProperties.getChildren().addAll(xPosFieldLabel, xPosField, yPosFieldLabel, yPosField, widthFieldLabel, widthField, heightFieldLabel, heightField, strokeFieldLabel, strokeField, fillColorLabel, fillColor, strokeColorLabel, strokeColor, generateButton);
 
     // =================================================================================================================
     // Area for drawing the shapes =====================================================================================
     StackPane drawingArea = new StackPane();
     Canvas area = new Canvas(600, 500);
-    gc = area.getGraphicsContext2D();
-    drawShapes(gc);
+    g = area.getGraphicsContext2D();
+    drawShape(g);
     drawingArea.setStyle("-fx-background-color: #eee");
 
     // Add all the elements to panel
