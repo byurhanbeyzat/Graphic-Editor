@@ -1,23 +1,23 @@
 package shapes;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.application.Application;
 import javafx.scene.paint.Color;
 
-public class LineShape {
-  int x, y, w, h;
-  Color c;
+public class LineShape  implements GraphicShape {
+  int posX, posY, lineLength, strokeWidth;
+  Color color;
 
-  public LineShape(int posX, int posY, int lineWidth, int lineHeight, Color lineColor) {
-    x = posX;
-    y = posY;
-    w = lineWidth;
-    h = lineHeight;
-    c = lineColor;
+  public LineShape(int posX, int posY, int lineLength, int strokeWidth, Color color) {
+    posX = posX;
+    posY = posY;
+    lineLength = lineLength;
+    strokeWidth = strokeWidth;
+    color = color;
   }
 
-//  public void DrawShape(GraphicsContext g) {
-//    g.setFill(c);
-//    g.strokeLine(x, y, w, h);
-//  }
+  public void drawShape(GraphicsContext g) {
+    g.setLineWidth(strokeWidth);
+    g.setStroke(color);
+    g.strokeLine(posX, posY, lineLength, strokeWidth);
+  }
 }
