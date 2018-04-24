@@ -1,6 +1,9 @@
 package utils;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+import java.util.Optional;
 
 public class AlertBox {
 
@@ -10,7 +13,12 @@ public class AlertBox {
     alert.setTitle(title);
     alert.setHeaderText(header);
     alert.setContentText(message);
-    alert.showAndWait();
+
+    Optional<ButtonType> result = alert.showAndWait();
+
+    if (result.get() == ButtonType.OK) {
+      System.exit(0);
+    } else if (result.get() == ButtonType.CANCEL) {}
   }
 
   // Warning alert box
@@ -19,6 +27,5 @@ public class AlertBox {
     alert.setTitle(title);
     alert.setHeaderText(header);
     alert.setContentText(message);
-    alert.showAndWait();
   }
 }

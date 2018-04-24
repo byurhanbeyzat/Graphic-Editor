@@ -8,13 +8,13 @@ public class RectShape implements GraphicShape {
   Color fillColor, strokeColor;
 
   public RectShape(int posX, int posY, int rectWidth, int rectHeight, int strokeWidth, Color fillColor, Color strokeColor) {
-    posX = posX;
-    posY = posY;
-    rectWidth = rectWidth;
-    rectHeight = rectHeight;
-    fillColor = fillColor;
-    strokeColor = strokeColor;
-    strokeWidth = strokeWidth;
+    this.posX = posX;
+    this.posY = posY;
+    this.rectWidth = rectWidth;
+    this.rectHeight = rectHeight;
+    this.fillColor = fillColor;
+    this.strokeColor = strokeColor;
+    this.strokeWidth = strokeWidth;
   }
 
   public void drawShape(GraphicsContext g) {

@@ -8,13 +8,13 @@ public class OvalShape implements GraphicShape {
   Color fillColor, strokeColor;
 
   public OvalShape(int posX, int posY, int ovalWidth, int ovalHeight, int strokeWidth, Color fillColor, Color strokeColor) {
-    posX = posX;
-    posY = posY;
-    ovalWidth = ovalWidth;
-    ovalHeight = ovalHeight;
-    fillColor = fillColor;
-    strokeColor = strokeColor;
-    strokeWidth = strokeWidth;
+    this.posX = posX;
+    this.posY = posY;
+    this.ovalWidth = ovalWidth;
+    this.ovalHeight = ovalHeight;
+    this.fillColor = fillColor;
+    this.strokeColor = strokeColor;
+    this.strokeWidth = strokeWidth;
   }
 
   public void drawShape(GraphicsContext g) {
